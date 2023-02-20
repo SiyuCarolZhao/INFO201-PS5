@@ -382,36 +382,36 @@ nrow(df)</code></pre>
 <li>(2pt) Print a small sample of data. Does it look OK?</li>
 </ol>
 <pre class="r"><code>df %&gt;% sample_n(5)</code></pre>
-<pre><code>##   iso3                     name iso2  region         sub.region
-## 1  BEL                  Belgium   BE  Europe     Western Europe
-## 2  CAF Central African Republic   CF  Africa Sub-Saharan Africa
-## 3  KOS                                                         
-## 4  GUM                     Guam   GU Oceania         Micronesia
-## 5  NRU                    Nauru   NR Oceania         Micronesia
+<pre><code>##   iso3         name iso2   region                      sub.region
+## 1  MAR      Morocco   MA   Africa                 Northern Africa
+## 2  TUN      Tunisia   TN   Africa                 Northern Africa
+## 3  SMR   San Marino   SM   Europe                 Southern Europe
+## 4  TKM Turkmenistan   TM     Asia                    Central Asia
+## 5  PRY     Paraguay   PY Americas Latin America and the Caribbean
 ##   intermediate.region time totalPopulation fertilityRate lifeExpectancy
-## 1                     1976         9818227         1.730       72.11976
-## 2       Middle Africa 2000         3640427         5.500       44.19000
-## 3                     2019         1788878         1.970       72.49512
-## 4                     1985          116572         3.095       70.70100
-## 5                     1993           10287            NA             NA
-##   childMortality youthFemaleLiteracy youthMaleLiteracy adultLiteracy     GDP_PC
-## 1           17.6                  NA                NA            NA 24573.9529
-## 2          169.8            49.01935          72.59475      50.64517   422.8639
-## 3             NA                  NA                NA            NA  4475.7788
-## 4             NA                  NA                NA            NA         NA
-## 5           53.2                  NA                NA            NA         NA
+## 1                     1980        19990012         5.685         57.560
+## 2                     1972         5291338         6.465         53.452
+## 3                     2000           27462            NA             NA
+## 4                     2009         5007954         2.769         66.355
+## 5       South America 2017         6867062         2.453         73.992
+##   childMortality youthFemaleLiteracy youthMaleLiteracy adultLiteracy    GDP_PC
+## 1          132.3                  NA                NA            NA  1351.206
+## 2          160.5                  NA                NA            NA  1561.460
+## 3            6.0                  NA                NA            NA 61992.940
+## 4           43.8                  NA                NA            NA  4129.540
+## 5           20.8                  NA                NA            NA  5272.361
 ##   accessElectricity agriculturalLand agricultureTractors cerealProduction
-## 1                NA            17810                  NA          1872856
-## 2                 6            51490                  NA           165600
-## 3               100               NA                  NA               NA
-## 4                NA              200                  NA               17
-## 5                NA                4                  NA               NA
-##   fertilizerHa        co2 greenhouseGases   co2_PC pm2.5_35 battleDeaths
-## 1    470.19266 130009.818    162850.55200 13.24168       NA           NA
-## 2      0.31088    267.691    499622.05800  0.07353      100           NA
-## 3           NA         NA              NA       NA       NA           NA
-## 4           NA         NA        57.26359       NA       NA           NA
-## 5           NA    113.677              NA 11.05055       NA           NA</code></pre>
+## 1                NA           289300               24684          4514720
+## 2                NA            89470               23500          1231300
+## 3         100.00000               10                  NA               NA
+## 4          99.59204           342050                  NA          1447360
+## 5          99.30000           217380                  NA          7207780
+##   fertilizerHa       co2 greenhouseGases   co2_PC pm2.5_35 battleDeaths
+## 1     27.44608 15944.116       29395.295  0.79760       NA           NA
+## 2     11.14551  4737.764        9434.597  0.89538       NA           NA
+## 3           NA        NA              NA       NA       NA           NA
+## 4           NA 50340.576       80016.140 10.05212       NA           NA
+## 5    116.79694        NA              NA       NA        0           NA</code></pre>
 <p><strong>2 Descriptive statistics (15pt)</strong></p>
 <ol style="list-style-type: decimal">
 <li>(3pt) How many countries are there in the dataset? Analyze all
@@ -564,52 +564,255 @@ ggplot(data = df_region_1960_2016, aes(x = region, y = avg_co2PC, fill = factor(
 emitters (in terms of CO2 percapita) in 2019 for each continent? (Assume
 region is continent).</li>
 </ol>
-<pre class="r"><code>df_region %&gt;% filter(time == &quot;2019&quot;) </code></pre>
-<pre><code>## # A tibble: 6 × 3
-## # Groups:   region [6]
-##   region      time avg_co2PC
-##   &lt;chr&gt;      &lt;int&gt;     &lt;dbl&gt;
-## 1 &quot;&quot;          2019       NaN
-## 2 &quot;Africa&quot;    2019       NaN
-## 3 &quot;Americas&quot;  2019       NaN
-## 4 &quot;Asia&quot;      2019       NaN
-## 5 &quot;Europe&quot;    2019       NaN
-## 6 &quot;Oceania&quot;   2019       NaN</code></pre>
-<p>I got all NA for filtering 2019, after remove the NAs, there is
+<pre class="r"><code>df %&gt;% filter(time == &quot;2019&quot; &amp; !is.na(co2_PC)) %&gt;% arrange(desc(co2_PC))</code></pre>
+<pre><code>##  [1] iso3                name                iso2               
+##  [4] region              sub.region          intermediate.region
+##  [7] time                totalPopulation     fertilityRate      
+## [10] lifeExpectancy      childMortality      youthFemaleLiteracy
+## [13] youthMaleLiteracy   adultLiteracy       GDP_PC             
+## [16] accessElectricity   agriculturalLand    agricultureTractors
+## [19] cerealProduction    fertilizerHa        co2                
+## [22] greenhouseGases     co2_PC              pm2.5_35           
+## [25] battleDeaths       
+## &lt;0 行&gt; (或0-长度的row.names)</code></pre>
+<p>I got all NA for filtering 2019. after remove the NA co2_PC, there is
 nothing left. I saw the conversation in Discord, it seems that I am not
 the only one with this problem. Otto said that it was fine to use the
 year 2016 instead as long as I explained. This chunk is to show that
 year 2019 does not work at all, and the next chunk will use year
 2016.</p>
-<pre class="r"><code>df_region2 &lt;- df  %&gt;% group_by(region, time) %&gt;% summarise(avg_co2PC = mean(co2_PC, na.rm=TRUE))</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;region&#39;. You can override using the
-## `.groups` argument.</code></pre>
-<pre class="r"><code>df_region2 %&gt;% filter(time == &quot;2016&quot;) %&gt;% arrange(desc(avg_co2PC)) #from largest to smallest</code></pre>
-<pre><code>## # A tibble: 6 × 3
-## # Groups:   region [6]
-##   region      time avg_co2PC
-##   &lt;chr&gt;      &lt;int&gt;     &lt;dbl&gt;
-## 1 &quot;&quot;          2016     19.4 
-## 2 &quot;Europe&quot;    2016      6.64
-## 3 &quot;Asia&quot;      2016      6.47
-## 4 &quot;Americas&quot;  2016      4.80
-## 5 &quot;Oceania&quot;   2016      4.57
-## 6 &quot;Africa&quot;    2016      1.20</code></pre>
-<pre class="r"><code>df_region2 %&gt;% filter(time == &quot;2016&quot;) %&gt;% arrange(avg_co2PC) #from smallest to largest</code></pre>
-<pre><code>## # A tibble: 6 × 3
-## # Groups:   region [6]
-##   region      time avg_co2PC
-##   &lt;chr&gt;      &lt;int&gt;     &lt;dbl&gt;
-## 1 &quot;Africa&quot;    2016      1.20
-## 2 &quot;Oceania&quot;   2016      4.57
-## 3 &quot;Americas&quot;  2016      4.80
-## 4 &quot;Asia&quot;      2016      6.47
-## 5 &quot;Europe&quot;    2016      6.64
-## 6 &quot;&quot;          2016     19.4</code></pre>
-<p>The three largest CO2 emitters are Europe, Asia, and Americas (if
-ignore the blank region), and the three smallest CO2 emitters are
-Africa, Oceania, and Americas. Since there are only 5 region, Americas
-is one of the three largest and one of the three smallest.</p>
+<pre class="r"><code>df %&gt;% filter(time == &quot;2016&quot; &amp; !is.na(co2_PC) &amp; region == &quot;Americas&quot;) %&gt;% arrange(desc(co2_PC)) %&gt;% head(3)</code></pre>
+<pre><code>##   iso3                     name iso2   region                      sub.region
+## 1  TTO      Trinidad and Tobago   TT Americas Latin America and the Caribbean
+## 2  USA United States of America   US Americas                Northern America
+## 3  CAN                   Canada   CA Americas                Northern America
+##   intermediate.region time totalPopulation fertilityRate lifeExpectancy
+## 1           Caribbean 2016         1377564        1.7530       73.10000
+## 2                     2016       322941311        1.8205       78.53902
+## 3                     2016        36109487        1.5433       81.90000
+##   childMortality youthFemaleLiteracy youthMaleLiteracy adultLiteracy   GDP_PC
+## 1           19.1                  NA                NA            NA 15696.90
+## 2            6.7                  NA                NA            NA 52643.92
+## 3            5.2                  NA                NA            NA 50193.75
+##   accessElectricity agriculturalLand agricultureTractors cerealProduction
+## 1               100              540                  NA             4850
+## 2               100          4052646                  NA        503465267
+## 3               100           580500                  NA         58904067
+##   fertilizerHa        co2 greenhouseGases   co2_PC pm2.5_35 battleDeaths
+## 1    364.00000   43868.32              NA 31.84485  0.00000           NA
+## 2    129.30976 5006302.08              NA 15.50220  0.01645           NA
+## 3     99.27329  544894.20              NA 15.09006  0.00000           NA</code></pre>
+<pre class="r"><code>df %&gt;% filter(time == &quot;2016&quot; &amp; !is.na(co2_PC) &amp; region == &quot;Americas&quot;) %&gt;% arrange(co2_PC) %&gt;% head(3)</code></pre>
+<pre><code>##   iso3      name iso2   region                      sub.region
+## 1  HTI     Haiti   HT Americas Latin America and the Caribbean
+## 2  NIC Nicaragua   NI Americas Latin America and the Caribbean
+## 3  HND  Honduras   HN Americas Latin America and the Caribbean
+##   intermediate.region time totalPopulation fertilityRate lifeExpectancy
+## 1           Caribbean 2016        10839970         3.041         62.896
+## 2     Central America 2016         6303974         2.455         73.860
+## 3     Central America 2016         9270795         2.536         74.701
+##   childMortality youthFemaleLiteracy youthMaleLiteracy adultLiteracy   GDP_PC
+## 1           68.5            82.63483          83.35350      61.69135 1265.229
+## 2           18.7                  NA                NA            NA 1895.200
+## 3           18.6            97.24561          94.94519      88.98748 2111.193
+##   accessElectricity agriculturalLand agricultureTractors cerealProduction
+## 1          40.40000            18400                  NA           523386
+## 2          84.74319            50650                  NA           933034
+## 3          91.60000            33200                  NA           701829
+##   fertilizerHa      co2 greenhouseGases  co2_PC pm2.5_35 battleDeaths
+## 1           NA 2977.604              NA 0.27469        0           NA
+## 2     59.17761 5592.175              NA 0.88709        0           NA
+## 3    164.13011 9812.892              NA 1.05847        0           NA</code></pre>
+<pre class="r"><code>df %&gt;% filter(time == &quot;2016&quot; &amp; !is.na(co2_PC) &amp; region == &quot;Asia&quot;) %&gt;% arrange(desc(co2_PC)) %&gt;% head(3)</code></pre>
+<pre><code>##   iso3    name iso2 region   sub.region intermediate.region time
+## 1  QAT   Qatar   QA   Asia Western Asia                     2016
+## 2  KWT  Kuwait   KW   Asia Western Asia                     2016
+## 3  BHR Bahrain   BH   Asia Western Asia                     2016
+##   totalPopulation fertilityRate lifeExpectancy childMortality
+## 1         2654374         1.907         79.868            7.5
+## 2         3956875         2.082         75.224            8.5
+## 3         1425791         2.033         76.899            7.4
+##   youthFemaleLiteracy youthMaleLiteracy adultLiteracy   GDP_PC
+## 1            97.26477          94.80638      93.14530 67187.81
+## 2                  NA                NA            NA 35886.99
+## 3            98.85029          99.95573      97.06668 22272.97
+##   accessElectricity agriculturalLand agricultureTractors cerealProduction
+## 1               100              670                  NA             1377
+## 2               100             1500                  NA             5257
+## 3               100               86                  NA               NA
+##   fertilizerHa       co2 greenhouseGases   co2_PC  pm2.5_35 battleDeaths
+## 1     216.7832 103259.05              NA 38.90147 100.00000           NA
+## 2    1000.7237  98733.98              NA 24.95251  99.89977           NA
+## 3     458.8813  31693.88              NA 22.22898 100.00000           NA</code></pre>
+<pre class="r"><code>df %&gt;% filter(time == &quot;2016&quot; &amp; !is.na(co2_PC) &amp; region == &quot;Asia&quot;) %&gt;% arrange(co2_PC) %&gt;% head(3)</code></pre>
+<pre><code>##   iso3        name iso2 region    sub.region intermediate.region time
+## 1  AFG Afghanistan   AF   Asia Southern Asia                     2016
+## 2  NPL       Nepal   NP   Asia Southern Asia                     2016
+## 3  YEM       Yemen   YE   Asia  Western Asia                     2016
+##   totalPopulation fertilityRate lifeExpectancy childMortality
+## 1        35383128         4.800         63.763           67.6
+## 2        27261131         2.027         69.848           34.6
+## 3        27168210         3.994         66.087           56.8
+##   youthFemaleLiteracy youthMaleLiteracy adultLiteracy   GDP_PC
+## 1                  NA                NA            NA 571.0738
+## 2                  NA                NA            NA 729.6614
+## 3                  NA                NA            NA 694.1524
+##   accessElectricity agriculturalLand agricultureTractors cerealProduction
+## 1          97.70000           379100                  NA          5537315
+## 2          90.70000            41210                  NA          8614283
+## 3          68.91871           233858                  NA           357068
+##   fertilizerHa       co2 greenhouseGases  co2_PC  pm2.5_35 battleDeaths
+## 1     13.68015  8672.455              NA 0.24510  99.63784        17978
+## 2     74.68117  9105.161              NA 0.33400  99.95669           NA
+## 3     18.98242 10608.631              NA 0.39048 100.00000         2846</code></pre>
+<pre class="r"><code>df %&gt;% filter(time == &quot;2016&quot; &amp; !is.na(co2_PC) &amp; region == &quot;Europe&quot;) %&gt;% arrange(desc(co2_PC)) %&gt;% head(3)</code></pre>
+<pre><code>##   iso3          name iso2 region      sub.region intermediate.region time
+## 1  GIB     Gibraltar   GI Europe Southern Europe                     2016
+## 2  LUX    Luxembourg   LU Europe  Western Europe                     2016
+## 3  FRO Faroe Islands   FO Europe Northern Europe                     2016
+##   totalPopulation fertilityRate lifeExpectancy childMortality
+## 1           33737            NA             NA             NA
+## 2          582014          1.41       82.68537            2.9
+## 3           48173          2.60       82.04390             NA
+##   youthFemaleLiteracy youthMaleLiteracy adultLiteracy   GDP_PC
+## 1                  NA                NA            NA       NA
+## 2                  NA                NA            NA 110162.1
+## 3                  NA                NA            NA       NA
+##   accessElectricity agriculturalLand agricultureTractors cerealProduction
+## 1               100               NA                  NA               NA
+## 2               100          1306.51                  NA           139262
+## 3               100            30.00                  NA               NA
+##   fertilizerHa      co2 greenhouseGases   co2_PC pm2.5_35 battleDeaths
+## 1           NA  634.391              NA 18.80401       NA           NA
+## 2      262.108 8987.817              NA 15.44261        0           NA
+## 3           NA  630.724              NA 13.09289       NA           NA</code></pre>
+<pre class="r"><code>df %&gt;% filter(time == &quot;2016&quot; &amp; !is.na(co2_PC) &amp; region == &quot;Europe&quot;) %&gt;% arrange(co2_PC) %&gt;% head(3)</code></pre>
+<pre><code>##   iso3                 name iso2 region      sub.region intermediate.region
+## 1  LIE        Liechtenstein   LI Europe  Western Europe                    
+## 2  ALB              Albania   AL Europe Southern Europe                    
+## 3  MDA Moldova, Republic of   MD Europe  Eastern Europe                    
+##   time totalPopulation fertilityRate lifeExpectancy childMortality
+## 1 2016           37658         1.610       82.25854             NA
+## 2 2016         2876101         1.659       78.19400            9.4
+## 3 2016         2802170         1.259       71.61700           15.3
+##   youthFemaleLiteracy youthMaleLiteracy adultLiteracy   GDP_PC
+## 1                  NA                NA            NA       NA
+## 2                  NA                NA            NA 4681.827
+## 3                  NA                NA            NA 3119.563
+##   accessElectricity agriculturalLand agricultureTractors cerealProduction
+## 1            100.00             51.6                  NA               NA
+## 2             99.89          11817.0                  NA           698430
+## 3            100.00          23179.0                  NA          2954175
+##   fertilizerHa      co2 greenhouseGases  co2_PC pm2.5_35 battleDeaths
+## 1           NA   51.338              NA 1.36327       NA           NA
+## 2    126.13848 4536.079              NA 1.57716        0           NA
+## 3     41.91925 5115.465              NA 1.82554        0           NA</code></pre>
+<pre class="r"><code>df %&gt;% filter(time == &quot;2016&quot; &amp; !is.na(co2_PC) &amp; region == &quot;Africa&quot;) %&gt;% arrange(desc(co2_PC)) %&gt;% head(3)</code></pre>
+<pre><code>##   iso3         name iso2 region         sub.region intermediate.region time
+## 1  ZAF South Africa   ZA Africa Sub-Saharan Africa     Southern Africa 2016
+## 2  LBY        Libya   LY Africa    Northern Africa                     2016
+## 3  SYC   Seychelles   SC Africa Sub-Saharan Africa      Eastern Africa 2016
+##   totalPopulation fertilityRate lifeExpectancy childMortality
+## 1        56207649         2.457       63.15300           36.2
+## 2         6492164         2.317       72.31100           12.8
+## 3           94677         2.390       74.30976           14.8
+##   youthFemaleLiteracy youthMaleLiteracy adultLiteracy    GDP_PC
+## 1                  NA                NA            NA  7476.090
+## 2                  NA                NA            NA  5669.734
+## 3                  NA                NA            NA 13606.091
+##   accessElectricity agriculturalLand agricultureTractors cerealProduction
+## 1          84.20000         963410.0                  NA         10197534
+## 2          71.91355         153500.0                  NA           268282
+## 3         100.00000             15.5                  NA               NA
+##   fertilizerHa        co2 greenhouseGases  co2_PC  pm2.5_35 battleDeaths
+## 1     57.25000 476643.994              NA 8.48006   6.15842           NA
+## 2     15.58269  50564.263              NA 7.78851 100.00000         1727
+## 3    521.73333    605.055              NA 6.39073   0.00000           NA</code></pre>
+<pre class="r"><code>df %&gt;% filter(time == &quot;2016&quot; &amp; !is.na(co2_PC) &amp; region == &quot;Africa&quot;) %&gt;% arrange(co2_PC) %&gt;% head(3)</code></pre>
+<pre><code>##   iso3                              name iso2 region         sub.region
+## 1  COD Congo, Democratic Republic of the   CD Africa Sub-Saharan Africa
+## 2  SOM                           Somalia   SO Africa Sub-Saharan Africa
+## 3  BDI                           Burundi   BI Africa Sub-Saharan Africa
+##   intermediate.region time totalPopulation fertilityRate lifeExpectancy
+## 1       Middle Africa 2016        78789127         6.112         59.655
+## 2      Eastern Africa 2016        14185613         6.265         56.324
+## 3      Eastern Africa 2016        10487998         5.599         60.528
+##   childMortality youthFemaleLiteracy youthMaleLiteracy adultLiteracy   GDP_PC
+## 1           93.9            79.71484          90.96097      77.04268 407.2896
+## 2          128.4                  NA                NA            NA       NA
+## 3           64.1                  NA                NA            NA 219.9615
+##   accessElectricity agriculturalLand agricultureTractors cerealProduction
+## 1          17.20158           320000                  NA          3032139
+## 2          30.87970           441250                  NA           142362
+## 3           9.25180            20330                  NA           467773
+##   fertilizerHa      co2 greenhouseGases  co2_PC  pm2.5_35 battleDeaths
+## 1      1.43182 2020.517              NA 0.02564  89.63482          755
+## 2           NA  645.392              NA 0.04550  19.67555         1925
+## 3     14.41631  495.045              NA 0.04720 100.00000           NA</code></pre>
+<pre class="r"><code>df %&gt;% filter(time == &quot;2016&quot; &amp; !is.na(co2_PC) &amp; region == &quot;Oceania&quot;) %&gt;% arrange(desc(co2_PC)) %&gt;% head(3)</code></pre>
+<pre><code>##   iso3          name iso2  region                sub.region intermediate.region
+## 1  NCL New Caledonia   NC Oceania                 Melanesia                    
+## 2  AUS     Australia   AU Oceania Australia and New Zealand                    
+## 3  PLW         Palau   PW Oceania                Micronesia                    
+##   time totalPopulation fertilityRate lifeExpectancy childMortality
+## 1 2016          276550         2.080       76.93171             NA
+## 2 2016        24190907         1.752       82.44878            3.8
+## 3 2016           17725            NA             NA           19.1
+##   youthFemaleLiteracy youthMaleLiteracy adultLiteracy   GDP_PC
+## 1                  NA                NA            NA       NA
+## 2                  NA                NA            NA 55728.68
+## 3                  NA                NA            NA 12555.73
+##   accessElectricity agriculturalLand agricultureTractors cerealProduction
+## 1               100           1840.3                  NA             8817
+## 2               100        3426020.0                  NA         35229204
+## 3               100             43.0                  NA               NA
+##   fertilizerHa        co2 greenhouseGases   co2_PC pm2.5_35 battleDeaths
+## 1    248.91122   5328.151              NA 19.26650       NA           NA
+## 2     89.08681 375907.837              NA 15.53922        0           NA
+## 3           NA    223.687              NA 12.61986       NA           NA</code></pre>
+<pre class="r"><code>df %&gt;% filter(time == &quot;2016&quot; &amp; !is.na(co2_PC) &amp; region == &quot;Oceania&quot;) %&gt;% arrange(co2_PC) %&gt;% head(3)</code></pre>
+<pre><code>##   iso3            name iso2  region sub.region intermediate.region time
+## 1  SLB Solomon Islands   SB Oceania  Melanesia                     2016
+## 2  VUT         Vanuatu   VU Oceania  Melanesia                     2016
+## 3  KIR        Kiribati   KI Oceania Micronesia                     2016
+##   totalPopulation fertilityRate lifeExpectancy childMortality
+## 1          619437         4.452         72.424           21.6
+## 2          278330         3.859         70.021           28.0
+## 3          112524         3.651         67.577           55.8
+##   youthFemaleLiteracy youthMaleLiteracy adultLiteracy   GDP_PC
+## 1                  NA                NA            NA 1707.228
+## 2                  NA                NA            NA 2803.765
+## 3                  NA                NA            NA 1773.028
+##   accessElectricity agriculturalLand agricultureTractors cerealProduction
+## 1          58.48770             1140                  NA             2726
+## 2          57.82000             1870                  NA              897
+## 3          93.63701              340                  NA               NA
+##   fertilizerHa     co2 greenhouseGases  co2_PC pm2.5_35 battleDeaths
+## 1           NA 168.682              NA 0.27232        0           NA
+## 2           NA 146.680              NA 0.52700        0           NA
+## 3           NA  66.006              NA 0.58659        0           NA</code></pre>
+<ul>
+<li><p>Three largest CO2 emitters in Americas are Trinidad and Tobago,
+United States of America, and Canada.</p></li>
+<li><p>Three smallest CO2 emitters in Americas are Haiti, Nicaragua, and
+Honduras</p></li>
+<li><p>Three largest CO2 emitters in Asia are Qatar, Kuwait, and
+Bahrain</p></li>
+<li><p>Three smallest CO2 emitters in Asia are Afghanistan, Nepal,and
+Yemen</p></li>
+<li><p>Three largest CO2 emitters in Europe are Gibraltar, Luxembourg,
+and Faroe Islands</p></li>
+<li><p>Three smallest CO2 emitters in Europe are Liechtenstein, Albania,
+and Moldova</p></li>
+<li><p>Three largest CO2 emitters in Africa are South Africa, Libya, and
+Seychelles</p></li>
+<li><p>Three smallest CO2 emitters in Africa are Congo, Somalia,and
+Burundi</p></li>
+<li><p>Three largest CO2 emitters in Oceania are New Caledonia,
+Australia, and Palau</p></li>
+<li><p>Three smallest CO2 emitters in Oceania are Solomon Islands,
+Vanuatu, and Kiribati</p></li>
+</ul>
 <p><strong>4 GDP per capita (50pt)</strong> Let’s look at GDP per capita
 (GDP_PC ). 1. (8pt) Make a scatterplot of GDP per capita versus life
 expectancy by country, using data for 1960. Make the point size

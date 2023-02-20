@@ -143,21 +143,52 @@ ggplot(data = df_region_1960_2016, aes(x = region, y = avg_co2PC, fill = factor(
 ```
 
 6. Which countries are the three largest, and three smallest CO2 emitters (in terms of CO2 percapita) in 2019 for each continent? (Assume region is continent).
-```{r}
-
-df_region %>% filter(time == "2019") 
-
-```
-I got all NA for filtering 2019, after remove the NAs, there is nothing left. I saw the conversation in Discord, it seems that I am not the only one with this problem. Otto said that it was fine to use the year 2016 instead as long as I explained. This chunk is to show that year 2019 does not work at all, and the next chunk will use year 2016.
 
 ```{r}
 
-df_region2 <- df  %>% group_by(region, time) %>% summarise(avg_co2PC = mean(co2_PC, na.rm=TRUE))
-df_region2 %>% filter(time == "2016") %>% arrange(desc(avg_co2PC)) #from largest to smallest
-df_region2 %>% filter(time == "2016") %>% arrange(avg_co2PC) #from smallest to largest
+df %>% filter(time == "2019" & !is.na(co2_PC)) %>% arrange(desc(co2_PC))
+```
+I got all NA for filtering 2019. after remove the NA co2_PC, there is nothing left. I saw the conversation in Discord, it seems that I am not the only one with this problem. Otto said that it was fine to use the year 2016 instead as long as I explained. This chunk is to show that year 2019 does not work at all, and the next chunk will use year 2016.
+```{r}
+
+df %>% filter(time == "2016" & !is.na(co2_PC) & region == "Americas") %>% arrange(desc(co2_PC)) %>% head(3)
+df %>% filter(time == "2016" & !is.na(co2_PC) & region == "Americas") %>% arrange(co2_PC) %>% head(3)
+
+df %>% filter(time == "2016" & !is.na(co2_PC) & region == "Asia") %>% arrange(desc(co2_PC)) %>% head(3)
+df %>% filter(time == "2016" & !is.na(co2_PC) & region == "Asia") %>% arrange(co2_PC) %>% head(3)
+
+df %>% filter(time == "2016" & !is.na(co2_PC) & region == "Europe") %>% arrange(desc(co2_PC)) %>% head(3)
+df %>% filter(time == "2016" & !is.na(co2_PC) & region == "Europe") %>% arrange(co2_PC) %>% head(3)
+
+
+df %>% filter(time == "2016" & !is.na(co2_PC) & region == "Africa") %>% arrange(desc(co2_PC)) %>% head(3)
+df %>% filter(time == "2016" & !is.na(co2_PC) & region == "Africa") %>% arrange(co2_PC) %>% head(3)
+
+df %>% filter(time == "2016" & !is.na(co2_PC) & region == "Oceania") %>% arrange(desc(co2_PC)) %>% head(3)
+df %>% filter(time == "2016" & !is.na(co2_PC) & region == "Oceania") %>% arrange(co2_PC) %>% head(3)
+
 
 ```
-The three largest CO2 emitters are Europe, Asia, and Americas (if ignore the blank region), and the three smallest CO2 emitters are Africa, Oceania, and Americas. Since there are only 5 region, Americas is one of the three largest and one of the three smallest.
+- Three largest CO2 emitters in Americas are Trinidad and Tobago, United States of America, and Canada.
+- Three smallest CO2 emitters in Americas are Haiti, Nicaragua, and Honduras
+
+
+- Three largest CO2 emitters in Asia are Qatar, Kuwait, and Bahrain
+- Three smallest CO2 emitters in Asia are Afghanistan, Nepal,and Yemen
+
+
+- Three largest CO2 emitters in Europe are Gibraltar, Luxembourg, and Faroe Islands
+- Three smallest CO2 emitters in Europe are Liechtenstein, Albania, and Moldova
+
+
+- Three largest CO2 emitters in Africa are South Africa, Libya, and Seychelles
+- Three smallest CO2 emitters in Africa are Congo, Somalia,and Burundi
+
+
+- Three largest CO2 emitters in Oceania are New Caledonia, Australia, and Palau
+- Three smallest CO2 emitters in Oceania are Solomon Islands, Vanuatu, and Kiribati
+
+
 
 
 **4 GDP per capita (50pt)**
